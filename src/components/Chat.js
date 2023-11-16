@@ -102,7 +102,7 @@ const Chat = () => {
                     preserveAspectRatio="xMidYMid meet"
                     className=""
                     version="1.1"
-                    x="0px"
+                    x="px"
                     y="0px"
                     enable-background="new 0 0 18 18"
                   >
@@ -152,7 +152,7 @@ const Chat = () => {
               <span data-icon="send" className="">
                 <svg
                   viewBox="0 0 24 24"
-                  height="12"
+                  height="13"
                   width="20"
                   preserveAspectRatio="xMidYMid meet"
                   className=""
