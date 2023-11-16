@@ -1,9 +1,35 @@
 import React, { useEffect, useState } from "react";
 import "./chat.css";
 import { getDatabase, ref, push, set, onChildAdded } from "firebase/database";
+import { GoogleAuthProvider, getAuth, signInWithPopup } from "firebase/auth";
 
 const Chat = () => {
-  const [name, setName] = useState("");
+  const provider = new GoogleAuthProvider();
+  const auth = getAuth();
+  const GoogleLogin = () => {
+    signInWithPopup(auth, provider)
+      .then((result) => {
+        // This gives you a Google Access Token. You can use it to access the Google API.
+        const credential = GoogleAuthProvider.credentialFromResult(result);
+        const token = credential.accessToken;
+        // The signed-in user info.
+        const user = result.user;
+        setUser({ name: result.user.displayName, email: result.user.email });
+        console.log(token, user);
+      })
+      .catch((error) => {
+        // Handle Errors here.
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        // The email of the user's account used.
+        const email = error.customData.email;
+        // The AuthCredential type that was used.
+        const credential = GoogleAuthProvider.credentialFromError(error);
+        // ...
+      });
+  };
+
+  const [user, setUser] = useState("");
   const [chat, setChat] = useState([]);
 
   const [msg, setMsg] = useState("");
@@ -30,7 +56,7 @@ const Chat = () => {
   const SendChat = () => {
     const chatRef = push(chatListRef);
     set(chatRef, {
-      name,
+      user,
       massage: msg,
     });
     setMsg("");
@@ -45,16 +71,19 @@ const Chat = () => {
 
   return (
     <div style={{ backgroundColor: "darkgrey", height: "630px" }}>
-      {name ? null : (
-        <input
-          className="nameInput"
-          type="text"
-          placeholder="Enter Name to Start Chatting"
-          onBlur={(e) => setName(e.target.value)}
-        ></input>
+      {user.email ? null : (
+        // <input
+        //   className="nameInput"
+        //   type="text"
+        //   placeholder="Enter Name to Start Chatting"
+        //   onBlur={(e) => setUser(e.target.value)}
+        // ></input>
+        <button type="btn" className="signIn" onClick={GoogleLogin}>
+          Sign In
+        </button>
       )}
 
-      {name ? (
+      {user.email ? (
         <>
           <div className="_3W2ap">
             <div className="_30scZ Mk0Bp">
@@ -64,7 +93,7 @@ const Chat = () => {
                 className="ggj6brxn gfz4du6o r7fjleex g0rxnol2 lhj4utae le5p0ye3 l7jjieqr _11JPr"
                 style={{ minHeight: "0px", marginLeft: "44%" }}
               >
-                {name}
+                {user.name}
                 <span data-icon="psa-verified" className="">
                   <svg
                     viewBox="0 0 18 18"
@@ -97,10 +126,12 @@ const Chat = () => {
             {chat.map((c, i) => (
               <div
                 key={i}
-                className={`container ${c.name === name ? "me" : ""}`}
+                className={`container ${
+                  c.user.email === user.email ? "me" : ""
+                }`}
               >
                 <p className="chatbox">
-                  <strong>{c.name} </strong> : {c.massage}
+                  <strong>{c.user.name} </strong> : {c.massage}
                 </p>
               </div>
             ))}
