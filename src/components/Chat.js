@@ -14,7 +14,9 @@ const Chat = () => {
         const token = credential.accessToken;
         // The signed-in user info.
         const user = result.user;
+        // setUser(result.user.displayName);
         setUser({ name: result.user.displayName, email: result.user.email });
+
         console.log(token, user);
       })
       .catch((error) => {
@@ -71,7 +73,7 @@ const Chat = () => {
 
   return (
     <div style={{ backgroundColor: "darkgrey", height: "630px" }}>
-      {user.displayName ? null : (
+      {user.name ? null : (
         // <input
         //   className="nameInput"
         //   type="text"
@@ -83,7 +85,7 @@ const Chat = () => {
         </button>
       )}
 
-      {user.displayName ? (
+      {user.name ? (
         <>
           <div className="_3W2ap">
             <div className="_30scZ Mk0Bp">
