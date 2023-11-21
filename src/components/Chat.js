@@ -71,7 +71,7 @@ const Chat = () => {
 
   return (
     <div style={{ backgroundColor: "darkgrey", height: "630px" }}>
-      {user.email ? null : (
+      {user.displayName ? null : (
         // <input
         //   className="nameInput"
         //   type="text"
@@ -83,7 +83,7 @@ const Chat = () => {
         </button>
       )}
 
-      {user.email ? (
+      {user.displayName ? (
         <>
           <div className="_3W2ap">
             <div className="_30scZ Mk0Bp">
